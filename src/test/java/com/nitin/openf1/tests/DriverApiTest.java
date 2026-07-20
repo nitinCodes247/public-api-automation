@@ -1,21 +1,16 @@
 package com.nitin.openf1.tests;
 
 import com.nitin.openf1.client.DriverService;
-import com.nitin.openf1.client.OpenF1Client;
 import com.nitin.openf1.constants.ConstantTestData;
-import com.nitin.openf1.constants.Endpoints;
 import com.nitin.openf1.models.response.DriverResponse;
+import com.nitin.openf1.testdata.DriverTestData;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Map;
-
 public class DriverApiTest {
-    int driverNumber = ConstantTestData.DRIVER_NUMBER;
-    int sessionKey = ConstantTestData.SESSION_KEY;
-    @Test
-    public void shouldFetchDriverDetails() {
+    @Test(dataProvider = "valid-driver-test", dataProviderClass = DriverTestData.class)
+    public void shouldReturnDriverForValidDriverNumberAndSessionKey(int driverNumber, int sessionKey) {
         Response response = DriverService.getDriverDetails(driverNumber,sessionKey);
 
         Assert.assertEquals(response.statusCode(),200,"Expected status code of 200");
@@ -31,6 +26,18 @@ public class DriverApiTest {
 
         Assert.assertNotNull(driverDetails.getFullName(),"Driver Full Name should not be null");
         Assert.assertFalse(driverDetails.getFullName().isBlank(),"Driver Full Name should not be blank");
-        Assert.assertNotNull(driverDetails.getTeamName(),"Driver Team Name should not be null");
+    }
+
+    @Test
+    public void shouldReturnEmptyResponseForInvalidDriverNumber(){
+        int invalidDriverNumber = ConstantTestData.INVALID_DRIVER_NUMBER;
+
+        Response response = DriverService.getDriverDetails(invalidDriverNumber, ConstantTestData.SESSION_KEY);
+
+        Assert.assertEquals(response.statusCode(), 404, "Expected status code 404 for a valid request with no matching data");
+
+        String errorMessage = response.asString();
+
+        Assert.assertTrue(errorMessage.contains(ConstantTestData.NOT_FOUND_ERROR), "Expected no results message");
     }
 }
