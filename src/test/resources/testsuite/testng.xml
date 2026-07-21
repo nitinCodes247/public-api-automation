@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="OpenF1 API Automation Suite">
+
+    <listeners>
+        <listener class-name="com.nitin.openf1.listeners.TestListener"/>
+    </listeners>
+
+    <test name="OpenF1 API Tests">
+
+        <classes>
+            <class name="com.nitin.openf1.tests.DriverApiTest"/>
+            <class name="com.nitin.openf1.tests.SessionApiTest"/>
+        </classes>
+
+    </test>
+
+</suite>
