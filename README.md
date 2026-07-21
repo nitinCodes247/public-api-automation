@@ -190,9 +190,7 @@ The Maven Surefire Plugin automatically executes the configured TestNG suite.
 
 ## Local Execution
 
-```markdown
 ![Execution](test-reports/test-execution.gif)
-```
 
 ---
 
